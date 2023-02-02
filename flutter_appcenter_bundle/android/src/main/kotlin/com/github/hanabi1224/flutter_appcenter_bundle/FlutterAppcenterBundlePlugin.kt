@@ -2,7 +2,6 @@ package com.github.hanabi1224.flutter_appcenter_bundle
 
 import android.app.Application
 import android.util.Log
-import androidx.annotation.NonNull
 import com.microsoft.appcenter.AppCenter
 import com.microsoft.appcenter.analytics.Analytics
 import com.microsoft.appcenter.crashes.Crashes
@@ -19,7 +18,7 @@ import io.flutter.plugin.common.PluginRegistry.Registrar
 
 /** FlutterAppcenterBundlePlugin */
 class FlutterAppcenterBundlePlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
-    override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+    override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         val channel = MethodChannel(flutterPluginBinding.binaryMessenger, methodChannelName)
         channel.setMethodCallHandler(FlutterAppcenterBundlePlugin())
     }
@@ -40,13 +39,13 @@ class FlutterAppcenterBundlePlugin : FlutterPlugin, MethodCallHandler, ActivityA
 
         @JvmStatic
         fun registerWith(registrar: Registrar) {
-            application = registrar.activity().application
+            application = registrar.activity()?.application
             val channel = MethodChannel(registrar.messenger(), methodChannelName)
             channel.setMethodCallHandler(FlutterAppcenterBundlePlugin())
         }
     }
 
-    override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
+    override fun onMethodCall(call: MethodCall, result: Result) {
         Log.d("onMethodCall", "[${methodChannelName}] ${call.method}")
         try {
             when (call.method) {
@@ -61,7 +60,7 @@ class FlutterAppcenterBundlePlugin : FlutterPlugin, MethodCallHandler, ActivityA
                     val appSecret = call.argument<String>("secret")
                     val usePrivateTrack = call.argument<Boolean>("usePrivateTrack")
                     if (usePrivateTrack == true){
-                        Distribute.setUpdateTrack(UpdateTrack.PRIVATE);
+                        Distribute.setUpdateTrack(UpdateTrack.PRIVATE)
                     }
 
                     if (appSecret == null || appSecret.isEmpty()) {
@@ -128,7 +127,7 @@ class FlutterAppcenterBundlePlugin : FlutterPlugin, MethodCallHandler, ActivityA
         }
     }
 
-    override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
+    override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
     }
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
